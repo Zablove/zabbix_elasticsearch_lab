@@ -82,6 +82,10 @@ As you can see, no password is required, this means security is not enabled in E
 ![Elastic Discover](./screenshots/Elastic_4.png)
 ![Elastic Change timefilter](./screenshots/Elastic_5.png)
 
+7. Create some random trigger data
+   - In Zabbix browse to `Data collection` -> `Hosts`
+   - Click the `Import` button and import the file `zbx_import_test_hosts.xml` from this repo
+
 You can now analyze your triggers in Elasticsearch. In the graph you will see all trigger actions present in Elastic over the selected time period. At the left collum, you can hover over all fields. If you click a field, you will be able to see the top values and with the button `Visualize` you will be able to create graphs, which you can also place on a dashboard.
 
 ![Visualize](./screenshots/Elastic_5.png)
