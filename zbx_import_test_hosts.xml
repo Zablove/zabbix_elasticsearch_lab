@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zabbix_export>
+    <version>6.4</version>
+    <host_groups>
+        <host_group>
+            <uuid>dc579cd7a1a34222933f24f52a68bcd8</uuid>
+            <name>Linux servers</name>
+        </host_group>
+    </host_groups>
+    <hosts>
+        <host>
+            <host>TestHost1</host>
+            <name>TestHost1</name>
+            <groups>
+                <group>
+                    <name>Linux servers</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <name>Test Item 1</name>
+                    <type>SCRIPT</type>
+                    <key>test.item1</key>
+                    <delay>5s</delay>
+                    <params>function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+return(getRandomInt(3));</params>
+                    <triggers>
+                        <trigger>
+                            <expression>last(/TestHost1/test.item1)&lt;&gt;0</expression>
+                            <name>Test Trigger AB</name>
+                            <priority>HIGH</priority>
+                            <tags>
+                                <tag>
+                                    <tag>environment</tag>
+                                    <value>test</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                        <trigger>
+                            <expression>last(/TestHost1/test.item1)=2</expression>
+                            <name>Test Trigger Alert at 2</name>
+                            <priority>HIGH</priority>
+                            <tags>
+                                <tag>
+                                    <tag>environment</tag>
+                                    <value>acceptance</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <tags>
+                <tag>
+                    <tag>customer</tag>
+                    <value>StalkRite Monitoring Services</value>
+                </tag>
+            </tags>
+            <inventory_mode>DISABLED</inventory_mode>
+        </host>
+        <host>
+            <host>TestHost2</host>
+            <name>TestHost2</name>
+            <groups>
+                <group>
+                    <name>Linux servers</name>
+                </group>
+            </groups>
+            <items>
+                <item>
+                    <name>Test Item 1</name>
+                    <type>SCRIPT</type>
+                    <key>test.item1</key>
+                    <delay>5s</delay>
+                    <params>function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+return(getRandomInt(3));</params>
+                    <triggers>
+                        <trigger>
+                            <expression>last(/TestHost2/test.item1)&lt;&gt;0</expression>
+                            <name>Test Trigger CD</name>
+                            <priority>HIGH</priority>
+                            <tags>
+                                <tag>
+                                    <tag>environment</tag>
+                                    <value>production</value>
+                                </tag>
+                            </tags>
+                        </trigger>
+                    </triggers>
+                </item>
+            </items>
+            <tags>
+                <tag>
+                    <tag>customer</tag>
+                    <value>SpyEye Solutions Ltd.</value>
+                </tag>
+            </tags>
+            <inventory_mode>DISABLED</inventory_mode>
+        </host>
+    </hosts>
+</zabbix_export>
