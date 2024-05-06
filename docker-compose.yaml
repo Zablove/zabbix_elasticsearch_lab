@@ -1,0 +1,79 @@
+version: "3.8"
+services:
+  mysql-server:
+    image: mysql:8.0-oracle
+    environment:
+      - MYSQL_DATABASE=zabbix
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=zabbix_pwd
+      - MYSQL_ROOT_PASSWORD=root_pwd
+    restart: unless-stopped
+    command:  mysqld --character-set-server=utf8 --collation-server=utf8_bin --default-authentication-plugin=mysql_native_password --pid-file=/var/lib/mysql/mysqld.pid
+    networks:
+      - elastic
+  zabbix-server-mysql:
+    image: zabbix/zabbix-server-mysql:alpine-6.4-latest
+    environment:
+      - DB_SERVER_HOST=mysql-server
+      - MYSQL_DATABASE=zabbix
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=zabbix_pwd
+      - MYSQL_ROOT_PASSWORD=root_pwd
+      - ZBX_STARTCONNECTORS=1
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - mysql-server
+    restart: unless-stopped
+    ports:
+      - 10051:10051
+    links:
+      - elasticsearch
+    networks:
+      - elastic
+  zabbix-web-nginx-mysql:
+    image: zabbix/zabbix-web-nginx-mysql:alpine-6.4-latest
+    environment:
+      - ZBX_SERVER_HOST=zabbix-server-mysql
+      - DB_SERVER_HOST=mysql-server
+      - MYSQL_DATABASE=zabbix
+      - MYSQL_USER=zabbix
+      - MYSQL_PASSWORD=zabbix_pwd
+      - MYSQL_ROOT_PASSWORD=root_pwd
+    depends_on:
+      - mysql-server
+    restart: unless-stopped
+    ports:
+      - 80:8080
+    networks:
+      - elastic
+  elasticsearch:
+    image: elasticsearch:8.13.0
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - xpack.security.enabled=false
+    ports:
+      - target: 9200
+        published: 9200
+    networks:
+      - elastic
+
+  kibana:
+    image: kibana:8.13.0
+    ports:
+      - target: 5601
+        published: 5601
+    depends_on:
+      - elasticsearch
+    networks:
+      - elastic
+
+volumes:
+  es_data:
+  mysql:
+
+networks:
+  elastic:
+    name: elastic
+    driver: bridge
